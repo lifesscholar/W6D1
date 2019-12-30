@@ -89,8 +89,12 @@ class SQLObject
   def insert
     columns = self.classs.columns.drop(1)
     col_names = columns.map(&:to_s).join(",")
-    question_marks
-  end
+    question_marks = (["?"] * columns.count).join(",")
+    DBConnection.execute(<<-SQL, *attribute_values.drop(1))
+      INSERT INTO
+        #{self.class.table_name} (#{col_names})
+      VALUES
+        
 
   def update
     # ...
